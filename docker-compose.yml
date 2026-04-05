@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:7.0
+    container_name: nexusai_mongodb
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_DATABASE: nexusai_db
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - nexusai_network
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: nexusai_backend
+    restart: unless-stopped
+    env_file:
+      - ./backend/.env
+    ports:
+      - '3001:3001'
+    depends_on:
+      - mongodb
+    networks:
+      - nexusai_network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: nexusai_frontend
+    restart: unless-stopped
+    env_file:
+      - ./frontend/.env.local
+    ports:
+      - '3000:3000'
+    depends_on:
+      - backend
+    networks:
+      - nexusai_network
+
+volumes:
+  mongodb_data:
+
+networks:
+  nexusai_network:
+    driver: bridge

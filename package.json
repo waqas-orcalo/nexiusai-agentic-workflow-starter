@@ -1,0 +1,24 @@
+{
+  "name": "nexusai-agentic-workflow",
+  "version": "1.0.0",
+  "description": "Multi-agent software development workflow powered by Claude AI",
+  "private": true,
+  "scripts": {
+    "build": "tsc --noEmit",
+    "typecheck": "tsc --noEmit --strict",
+    "lint": "eslint 'agents/**/*.ts' 'workflow/**/*.ts' --fix"
+  },
+  "dependencies": {
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "@types/uuid": "^9.0.8",
+    "typescript": "^5.4.5",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^7.0.0",
+    "eslint": "^8.57.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
