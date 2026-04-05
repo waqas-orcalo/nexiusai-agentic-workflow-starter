@@ -1,4 +1,1 @@
-export const AUTH_TOKEN_BYPASS_API = {
-  LOGIN: 'login',
-  REGISTER: 'register',
-};
+// Auth constants removed — no admin authentication

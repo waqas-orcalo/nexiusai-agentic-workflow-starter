@@ -1,0 +1,176 @@
+export const styles = {
+  overlay: () => ({
+    minHeight: '100vh',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#F4F2EE',
+    pt: '60px',
+  }),
+  modal: () => ({
+    display: 'flex',
+    width: 760,
+    borderRadius: '20px',
+    overflow: 'hidden',
+    boxShadow: '0 20px 60px rgba(0,0,0,0.2)',
+    backgroundColor: '#fff',
+  }),
+  leftPanel: () => ({
+    width: 380,
+    backgroundColor: '#2A1F1A',
+    p: 4,
+    display: 'flex',
+    flexDirection: 'column',
+    color: '#fff',
+  }),
+  leftLogo: () => ({
+    display: 'flex',
+    alignItems: 'center',
+    gap: 1,
+    mb: 4,
+  }),
+  leftLogoIcon: () => ({
+    width: 28,
+    height: 28,
+    borderRadius: 6,
+    backgroundColor: '#C8622A',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  }),
+  leftLogoText: () => ({
+    color: '#fff',
+    fontWeight: 700,
+    fontSize: 15,
+  }),
+  robotIcon: () => ({
+    fontSize: '64px',
+    color: '#C8622A',
+    mx: 'auto',
+    my: 3,
+  }),
+  leftHeading: () => ({
+    fontSize: '22px',
+    fontWeight: 700,
+    mb: 1,
+    color: '#fff',
+  }),
+  leftSubtitle: () => ({
+    fontSize: '13px',
+    color: 'rgba(255,255,255,0.65)',
+    mb: 2,
+  }),
+  featureBullet: () => ({
+    display: 'flex',
+    gap: 1,
+    alignItems: 'flex-start',
+    mb: 1,
+  }),
+  bulletDot: () => ({
+    width: 6,
+    height: 6,
+    borderRadius: '50%',
+    backgroundColor: '#C8622A',
+    mt: 0.7,
+    flexShrink: 0,
+  }),
+  bulletText: () => ({
+    fontSize: '13px',
+    color: 'rgba(255,255,255,0.8)',
+  }),
+  rightPanel: () => ({
+    flex: 1,
+    p: 4,
+    position: 'relative',
+  }),
+  closeBtn: () => ({
+    position: 'absolute',
+    top: 12,
+    right: 12,
+    color: '#1C1A16',
+  }),
+  tabs: () => ({
+    borderBottom: '1px solid rgba(0,0,0,0.1)',
+    mb: 3,
+    '& .MuiTab-root': {
+      textTransform: 'none',
+      fontWeight: 500,
+      color: '#5A5750',
+    },
+    '& .MuiTabs-indicator': {
+      backgroundColor: '#C8622A',
+    },
+    '& .Mui-selected': {
+      color: '#C8622A',
+    },
+  }),
+  form: () => ({
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 2,
+  }),
+  formHeading: () => ({
+    fontWeight: 700,
+    mb: 0.5,
+    color: '#1C1A16',
+  }),
+  formSubtitle: () => ({
+    color: '#5A5750',
+    fontSize: 14,
+    mb: 1,
+  }),
+  field: () => ({
+    '& .MuiOutlinedInput-root': {
+      borderRadius: '8px',
+    },
+  }),
+  forgotLink: () => ({
+    fontSize: 13,
+    color: '#C8622A',
+    cursor: 'pointer',
+    textAlign: 'right',
+    mb: 1,
+  }),
+  submitBtn: () => ({
+    backgroundColor: '#C8622A',
+    borderRadius: '8px',
+    py: 1.5,
+    textTransform: 'none',
+    fontSize: 15,
+    fontWeight: 600,
+    color: '#fff',
+    '&:hover': {
+      backgroundColor: '#A34D1E',
+    },
+  }),
+  divider: () => ({
+    fontSize: 13,
+    color: '#9E9B93',
+    my: 1,
+  }),
+  oauthRow: () => ({
+    display: 'flex',
+    gap: 1,
+  }),
+  oauthBtn: () => ({
+    flex: 1,
+    textTransform: 'none',
+    color: '#1C1A16',
+    borderColor: 'rgba(0,0,0,0.15)',
+    borderRadius: 8,
+    fontWeight: 500,
+    '&:hover': {
+      borderColor: '#1C1A16',
+    },
+  }),
+  switchText: () => ({
+    fontSize: 13,
+    color: '#9E9B93',
+    textAlign: 'center',
+  }),
+  switchLink: () => ({
+    color: '#C8622A',
+    cursor: 'pointer',
+    fontWeight: 500,
+  }),
+};

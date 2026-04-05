@@ -1,5 +1,1 @@
-import CoursesList from '@/modules/courses/CoursesList';
-
-const CoursesPage = () => <CoursesList />;
-
-export default CoursesPage;
+export default function CoursesPage() { return null; }

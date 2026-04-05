@@ -43,3 +43,48 @@ export enum CourseStatus {
   PUBLISHED = 'PUBLISHED',
   ARCHIVED = 'ARCHIVED',
 }
+
+// ─────────────────────────────────────────────
+//  AI Model
+// ─────────────────────────────────────────────
+export enum AiModelCategory {
+  LANGUAGE = 'Language',
+  VISION = 'Vision',
+  CODE = 'Code',
+  IMAGE_GEN = 'Image Gen',
+  AUDIO = 'Audio',
+  OPEN_SOURCE = 'Open Source',
+  MULTIMODAL = 'Multimodal',
+}
+
+export enum AiModelPricingModel {
+  PAY_PER_USE = 'Pay Per Use',
+  SUBSCRIPTION = 'Subscription',
+  FREE_TIER = 'Free',
+  ENTERPRISE = 'Enterprise',
+}
+
+export enum AiModelStatus {
+  ACTIVE = 'ACTIVE',
+  BETA = 'BETA',
+  DEPRECATED = 'DEPRECATED',
+}
+
+// ─────────────────────────────────────────────
+//  Agent
+// ─────────────────────────────────────────────
+export enum AgentTemplateType {
+  RESEARCH = 'RESEARCH',
+  SUPPORT = 'SUPPORT',
+  CODING = 'CODING',
+  DATA = 'DATA',
+  MARKETING = 'MARKETING',
+  SALES = 'SALES',
+  CUSTOM = 'CUSTOM',
+}
+
+export enum AgentStatus {
+  ACTIVE = 'ACTIVE',
+  INACTIVE = 'INACTIVE',
+  DRAFT = 'DRAFT',
+}

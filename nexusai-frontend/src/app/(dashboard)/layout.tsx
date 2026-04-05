@@ -1,11 +1,6 @@
-'use client';
-import AuthGuard from '@/GuardsAndPermissions/AuthGuard';
-import MainLayout from '@/layout/MainLayout';
+import { redirect } from 'next/navigation';
 
-export default function DashboardLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <AuthGuard>
-      <MainLayout>{children}</MainLayout>
-    </AuthGuard>
-  );
+// Admin dashboard removed — redirect all dashboard routes to home
+export default function DashboardLayout() {
+  redirect('/home');
 }

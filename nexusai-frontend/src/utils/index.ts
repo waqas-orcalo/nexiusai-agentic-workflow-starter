@@ -26,16 +26,16 @@ export const isTokenValidationCheck = (token: string): boolean => {
 export const setSession = (data: any): void => {
   if (typeof window === 'undefined') return;
   if (!data) {
-    sessionStorage.removeItem('auth_session');
+    localStorage.removeItem('auth_session');
     return;
   }
-  sessionStorage.setItem('auth_session', JSON.stringify(data));
+  localStorage.setItem('auth_session', JSON.stringify(data));
 };
 
 export const getSession = (): any => {
   if (typeof window === 'undefined') return {};
   try {
-    const data = sessionStorage.getItem('auth_session');
+    const data = localStorage.getItem('auth_session');
     return data ? JSON.parse(data) : {};
   } catch {
     return {};
@@ -45,16 +45,16 @@ export const getSession = (): any => {
 export const setActiveProductSession = (product: any): void => {
   if (typeof window === 'undefined') return;
   if (!product) {
-    sessionStorage.removeItem('active_product');
+    localStorage.removeItem('active_product');
     return;
   }
-  sessionStorage.setItem('active_product', JSON.stringify(product));
+  localStorage.setItem('active_product', JSON.stringify(product));
 };
 
 export const getActiveProductSession = (): any => {
   if (typeof window === 'undefined') return null;
   try {
-    const data = sessionStorage.getItem('active_product');
+    const data = localStorage.getItem('active_product');
     return data ? JSON.parse(data) : null;
   } catch {
     return null;
@@ -64,16 +64,16 @@ export const getActiveProductSession = (): any => {
 export const setActivePermissionsSession = (perms: any): void => {
   if (typeof window === 'undefined') return;
   if (!perms) {
-    sessionStorage.removeItem('permissions');
+    localStorage.removeItem('permissions');
     return;
   }
-  sessionStorage.setItem('permissions', JSON.stringify(perms));
+  localStorage.setItem('permissions', JSON.stringify(perms));
 };
 
 export const getActivePermissionsSession = (): string[] => {
   if (typeof window === 'undefined') return [];
   try {
-    const data = sessionStorage.getItem('permissions');
+    const data = localStorage.getItem('permissions');
     return data ? JSON.parse(data) : [];
   } catch {
     return [];
@@ -83,8 +83,8 @@ export const getActivePermissionsSession = (): string[] => {
 export const setActiveAccountSession = (account: any): void => {
   if (typeof window === 'undefined') return;
   if (!account) {
-    sessionStorage.removeItem('active_account');
+    localStorage.removeItem('active_account');
     return;
   }
-  sessionStorage.setItem('active_account', JSON.stringify(account));
+  localStorage.setItem('active_account', JSON.stringify(account));
 };

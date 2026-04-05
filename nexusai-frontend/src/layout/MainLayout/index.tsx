@@ -1,23 +1,10 @@
 'use client';
-import { Box, Toolbar } from '@mui/material';
+import { Box } from '@mui/material';
 import { ReactNode } from 'react';
-import Header from '@/layout/Header';
-import Sidebar from '@/layout/Sidebar';
-import { styles } from './styles';
 
-interface MainLayoutProps {
-  children: ReactNode;
-}
-
-const MainLayout = ({ children }: MainLayoutProps) => (
-  <Box sx={styles?.root()}>
-    <Header />
-    <Sidebar />
-    <Box component="main" sx={styles?.mainContent()}>
-      <Toolbar />
-      {children}
-    </Box>
-  </Box>
+// MainLayout stub — admin dashboard removed
+const MainLayout = ({ children }: { children: ReactNode }) => (
+  <Box>{children}</Box>
 );
 
 export default MainLayout;
