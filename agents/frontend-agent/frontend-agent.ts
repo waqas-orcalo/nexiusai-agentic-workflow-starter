@@ -9,6 +9,7 @@ export const FRONTEND_AGENT_META: AgentMeta = {
   name: 'frontend-agent',
   role: 'Frontend Engineer',
   capabilities: [
+    // ─── Core Engineering ────────────────────────────────────────────────────
     'react-nextjs',
     'typescript',
     'mui-v5',
@@ -18,6 +19,12 @@ export const FRONTEND_AGENT_META: AgentMeta = {
     'responsive-design',
     'api-integration',
     'component-architecture',
+    // ─── Specialist Skills ───────────────────────────────────────────────────
+    'skill:deep-ui-navigation-crawler',   // Map all pages/states before cloning
+    'skill:make-responsive',              // Add mobile support to React/Next.js apps
+    'skill:project-exploration',          // Crawl & document any live URL as a spec
+    'skill:website-design-extractor',     // Extract full visual design system from a URL
+    'skill:website-replicator',           // Full-stack Next.js + NestJS clone from a URL
   ],
   workingDirectory: 'frontend/',
 };

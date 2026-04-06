@@ -80,20 +80,40 @@ frontend/
 
 ---
 
+## Skills
+
+The agent has 5 specialist skills for website analysis, replication, and responsive design.
+Each skill is a self-contained methodology stored in `skills/` and exported from `prompts/skills.prompt.ts`.
+
+| Skill | File | When to Activate |
+|---|---|---|
+| Deep UI Navigation Crawler | `skills/deep-ui-navigation-crawler.md` | Before ANY design extraction, component analysis, or cloning task. Run FIRST. |
+| Make Responsive | `skills/make-responsive.md` | "make responsive", "fix on mobile", "broken on small screens" |
+| Project Exploration | `skills/project-exploration.md` | "explore this site", "document this project", "create a spec", URL for analysis |
+| Website Design Extractor | `skills/website-design-extractor.md` | "copy the look", "replicate design", "what colors/fonts", "extract design tokens" |
+| Website Replicator | `skills/website-replicator.md` | "clone this app", "rebuild in Next.js", URL for a full application |
+
+**Skill execution order for clone/replication tasks:**
+1. Deep UI Navigation Crawler → 2. Website Design Extractor → 3. Project Exploration → 4. Website Replicator
+
+---
+
 ## Execution Steps
 
 ```
 1. Read the AgentTask from Main Agent
-2. Scan /frontend/src to understand existing components/structure
-3. Identify which components need to be created vs. reused
-4. Create/update RTK Query service for required API endpoints
-5. Create Redux slice if state management is needed
-6. Build feature components (smallest → largest)
-7. Build/update page with layout and feature components
-8. Add responsive styles
-9. Wire up API integration
-10. Test locally (if possible)
-11. Return AgentReport to Main Agent
+2. Check if any skill should be activated (see Skills table above)
+3. If skill required: follow the skill methodology from skills/ directory
+4. Scan /frontend/src to understand existing components/structure
+5. Identify which components need to be created vs. reused
+6. Create/update RTK Query service for required API endpoints
+7. Create Redux slice if state management is needed
+8. Build feature components (smallest → largest)
+9. Build/update page with layout and feature components
+10. Add responsive styles
+11. Wire up API integration
+12. Test locally (if possible)
+13. Return AgentReport to Main Agent
 ```
 
 ---
