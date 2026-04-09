@@ -4,18 +4,23 @@ import { ReactNode } from 'react';
 
 const theme = createTheme({
   palette: {
-    primary: { main: '#1976d2' },
-    secondary: { main: '#dc004e' },
-    background: { default: '#f5f5f5' },
+    primary: { main: '#C8622A' },
+    secondary: { main: '#0A5E49' },
+    background: { default: 'transparent' },
   },
   typography: {
-    fontFamily: "'Inter', sans-serif",
+    fontFamily: "'Instrument Sans', -apple-system, BlinkMacSystemFont, sans-serif",
     h1: { fontSize: '2rem', fontWeight: 700 },
     h2: { fontSize: '1.5rem', fontWeight: 600 },
     h6: { fontSize: '1rem', fontWeight: 600 },
   },
   shape: { borderRadius: 8 },
   components: {
+    MuiCssBaseline: {
+      styleOverrides: {
+        body: { backgroundColor: 'transparent', fontFamily: "'Instrument Sans', sans-serif" },
+      },
+    },
     MuiButton: {
       styleOverrides: {
         root: { textTransform: 'none', fontWeight: 600 },

@@ -1,0 +1,46 @@
+export const styles = {
+  root: () => ({
+    width: '100%',
+    maxWidth: '1000px',
+    position: 'relative' as const,
+    marginBottom: '1.25rem',
+    zIndex: 100,
+  }),
+  card: () => ({
+    background: 'var(--white)',
+    border: '1.5px solid var(--border2)',
+    borderRadius: '28px',
+    boxShadow: 'var(--shadow-md)',
+    overflow: 'visible',
+    transition: 'border-color 0.25s, box-shadow 0.25s',
+  }),
+  cardFocused: () => ({
+    background: 'var(--white)',
+    border: '1.5px solid var(--accent)',
+    borderRadius: '28px',
+    boxShadow: '0 0 0 4px rgba(200,98,42,0.1), var(--shadow-md)',
+    overflow: 'visible',
+    transition: 'border-color 0.25s, box-shadow 0.25s',
+  }),
+  topRow: () => ({
+    display: 'flex',
+    alignItems: 'flex-start',
+    gap: '8px',
+    padding: '1rem 1.25rem 0.5rem',
+  }),
+  avatarIcons: () => ({
+    display: 'flex',
+    alignItems: 'center',
+    gap: '4px',
+    flexShrink: 0,
+  }),
+  avatarIcon: () => ({
+    width: '22px',
+    height: '22px',
+    borderRadius: '6px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    cursor: 'pointer',
+  }),
+};
