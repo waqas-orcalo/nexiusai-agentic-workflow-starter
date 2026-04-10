@@ -1,7 +1,13 @@
 'use client';
 
 import Link from 'next/link';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+  type CSSProperties,
+} from 'react';
 
 type TagVariant = 'blue' | 'green' | 'orange' | 'pink';
 
@@ -321,108 +327,269 @@ export default function AgentsPage() {
         </aside>
 
         <main className="agt2-main">
-          <div className="agt2-hero">
-            <div className="agt2-h1">
-              Agent works <span>for you.</span>
-            </div>
-            <div className="agt2-h2">
-              Your AI agent takes care of everything, end to end.
+          <div className="agt2-main-pad">
+            <div className="agt2-hero">
+              <div className="agt2-h1">
+                Agent works <span>for you.</span>
+              </div>
+              <div className="agt2-h2">
+                Your AI agent takes care of everything, end to end.
+              </div>
             </div>
           </div>
+          <div className="agt2-main-divider" aria-hidden />
 
-          <div className="agt2-composer">
-            <div className="agt2-input">
-              <input
-                value={prompt}
-                onChange={(e) => setPrompt(e.target.value)}
-                placeholder="What should we work on next?"
-              />
-            </div>
-            <div className="agt2-toolbar">
-              <div className="agt2-icons" aria-label="Tools">
-                <button
-                  type="button"
-                  className="agt2-ic t1"
-                  aria-label="Tool 1"
-                  onClick={() => setToast('Tool')}
+          <div className="agt2-main-pad">
+            <div className="agt2-composer-row">
+              <div className="agt2-composer">
+                <div className="agt2-input">
+                  <input
+                    value={prompt}
+                    onChange={(e) => setPrompt(e.target.value)}
+                    placeholder="What should we work on next?"
+                  />
+                </div>
+                {/* Toolbar icons match HeroSearchCard / nexusai-db (Voice, attach, image, …). */}
+                <div
+                  className="hsb-bottom-bar agt2-composer-bar"
+                  aria-label="Agent tools"
                 >
-                  φ
-                </button>
-                <button
-                  type="button"
-                  className="agt2-ic t2"
-                  aria-label="Tool 2"
-                  onClick={() => setToast('Tool')}
-                >
-                  ✦
-                </button>
-                <button
-                  type="button"
-                  className="agt2-ic t3"
-                  aria-label="Tool 3"
-                  onClick={() => setToast('Tool')}
-                >
-                  ⌗
-                </button>
-                <button
-                  type="button"
-                  className="agt2-ic t4"
-                  aria-label="Tool 4"
-                  onClick={() => setToast('Tool')}
-                >
-                  ▦
-                </button>
-                <button
-                  type="button"
-                  className="agt2-ic t5"
-                  aria-label="Tool 5"
-                  onClick={() => setToast('Tool')}
-                >
-                  ⊖
-                </button>
-                <button
-                  type="button"
-                  className="agt2-ic t6"
-                  aria-label="Tool 6"
-                  onClick={() => setToast('Tool')}
-                >
-                  ⟐
-                </button>
-                <button
-                  type="button"
-                  className="agt2-ic t7"
-                  aria-label="Tool 7"
-                  onClick={() => setToast('Tool')}
-                >
-                  +
-                </button>
+                  <button
+                    type="button"
+                    className="hsb-ibox"
+                    title="Voice input"
+                    aria-label="Voice input"
+                    onClick={() => setToast('Voice input')}
+                    style={
+                      {
+                        ['--ic' as string]: '#7C3AED',
+                        ['--ic-lt' as string]: '#F3EEFF',
+                        ['--ic-border' as string]: 'rgba(124,58,237,0.25)',
+                      } as CSSProperties
+                    }
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="#7C3AED"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      style={{ width: 14, height: 14 }}
+                    >
+                      <path d="M12 2a3 3 0 0 1 3 3v7a3 3 0 0 1-6 0V5a3 3 0 0 1 3-3z" />
+                      <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+                      <line x1="12" y1="19" x2="12" y2="22" />
+                    </svg>
+                  </button>
+                  <button
+                    type="button"
+                    className="hsb-ibox"
+                    title="Attach file"
+                    aria-label="Attach file"
+                    onClick={() => setToast('Attach file')}
+                    style={
+                      {
+                        ['--ic' as string]: '#D97706',
+                        ['--ic-lt' as string]: '#FFFBEB',
+                        ['--ic-border' as string]: 'rgba(217,119,6,0.25)',
+                      } as CSSProperties
+                    }
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="#D97706"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      style={{ width: 14, height: 14 }}
+                    >
+                      <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48" />
+                    </svg>
+                  </button>
+                  <button
+                    type="button"
+                    className="hsb-ibox"
+                    title="Upload image"
+                    aria-label="Upload image"
+                    onClick={() => setToast('Upload image')}
+                    style={
+                      {
+                        ['--ic' as string]: '#2563EB',
+                        ['--ic-lt' as string]: '#EFF6FF',
+                        ['--ic-border' as string]: 'rgba(37,99,235,0.25)',
+                      } as CSSProperties
+                    }
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="#2563EB"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      style={{ width: 14, height: 14 }}
+                    >
+                      <rect x="3" y="3" width="18" height="18" rx="2" />
+                      <circle cx="8.5" cy="8.5" r="1.5" />
+                      <polyline points="21 15 16 10 5 21" />
+                    </svg>
+                  </button>
+                  <button
+                    type="button"
+                    className="hsb-ibox"
+                    title="Voice typing"
+                    aria-label="Voice typing"
+                    onClick={() => setToast('Voice typing')}
+                    style={
+                      {
+                        ['--ic' as string]: '#0891B2',
+                        ['--ic-lt' as string]: '#E0F7FA',
+                        ['--ic-border' as string]: 'rgba(8,145,178,0.25)',
+                      } as CSSProperties
+                    }
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="#0891B2"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      style={{ width: 14, height: 14 }}
+                    >
+                      <rect x="2" y="14" width="20" height="7" rx="2" />
+                      <path
+                        d="M9 2a2 2 0 0 1 2 2v5a2 2 0 0 1-4 0V4a2 2 0 0 1 2-2z"
+                        transform="translate(3,0)"
+                      />
+                      <path d="M17 10v1a5 5 0 0 1-10 0v-1" />
+                      <line x1="8" y1="17" x2="8" y2="17.01" />
+                      <line x1="12" y1="17" x2="12" y2="17.01" />
+                      <line x1="16" y1="17" x2="16" y2="17.01" />
+                    </svg>
+                  </button>
+                  <button
+                    type="button"
+                    className="hsb-ibox"
+                    title="Video input"
+                    aria-label="Video input"
+                    onClick={() => setToast('Video input')}
+                    style={
+                      {
+                        ['--ic' as string]: '#DC2626',
+                        ['--ic-lt' as string]: '#FEF2F2',
+                        ['--ic-border' as string]: 'rgba(220,38,38,0.22)',
+                      } as CSSProperties
+                    }
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="#DC2626"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      style={{ width: 14, height: 14 }}
+                    >
+                      <polygon points="23 7 16 12 23 17 23 7" />
+                      <rect x="1" y="5" width="15" height="14" rx="2" ry="2" />
+                    </svg>
+                  </button>
+                  <button
+                    type="button"
+                    className="hsb-ibox"
+                    title="Share screen"
+                    aria-label="Share screen"
+                    onClick={() => setToast('Share screen')}
+                    style={
+                      {
+                        ['--ic' as string]: '#059669',
+                        ['--ic-lt' as string]: '#ECFDF5',
+                        ['--ic-border' as string]: 'rgba(5,150,105,0.25)',
+                      } as CSSProperties
+                    }
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="#059669"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      style={{ width: 14, height: 14 }}
+                    >
+                      <rect x="2" y="3" width="20" height="14" rx="2" />
+                      <polyline points="8 21 12 17 16 21" />
+                      <line x1="12" y1="17" x2="12" y2="21" />
+                    </svg>
+                  </button>
+
+                  <div className="hsb-bar-sep" aria-hidden />
+
+                  <button
+                    type="button"
+                    className="hsb-computer-chip"
+                    onClick={() => setToast('Agent +')}
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      style={{ width: 13, height: 13 }}
+                    >
+                      <rect x="2" y="3" width="20" height="14" rx="2" />
+                      <polyline points="8 21 12 17 16 21" />
+                      <line x1="12" y1="17" x2="12" y2="21" />
+                    </svg>
+                    Agent
+                    <span className="hsb-computer-chip-plus">+</span>
+                  </button>
+
+                  <div className="agt2-spacer" aria-hidden />
+                </div>
               </div>
-              <div className="agt2-spacer" />
-              <div className="agt2-pill">Agent</div>
               <button
                 type="button"
                 className="agt2-send"
                 aria-label="Send"
                 onClick={() => setToast('Send')}
               >
-                ➤
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  width={18}
+                  height={18}
+                  aria-hidden
+                >
+                  <path d="M3 11.5v1.2c0 .2.1.4.3.5l14.2 7.9c.4.2.8-.1.8-.5V2.9c0-.4-.4-.7-.8-.5L3.3 11c-.2.1-.3.3-.3.5z" />
+                </svg>
               </button>
+            </div>
+
+            <div className="agt2-chips">
+              {USE_CASE_CHIPS.map((c) => (
+                <button
+                  key={c.id}
+                  type="button"
+                  className={`agt2-chip${c.id === activeChipId ? ' on' : ''}`}
+                  onClick={() => setActiveChipId(c.id)}
+                >
+                  <span className="agt2-chip-ic">{c.icon}</span>
+                  {c.label}
+                </button>
+              ))}
             </div>
           </div>
 
-          <div className="agt2-chips">
-            {USE_CASE_CHIPS.map((c) => (
-              <button
-                key={c.id}
-                type="button"
-                className={`agt2-chip${c.id === activeChipId ? ' on' : ''}`}
-                onClick={() => setActiveChipId(c.id)}
-              >
-                <span className="agt2-chip-ic">{c.icon}</span>
-                {c.label}
-              </button>
-            ))}
-          </div>
+          <div
+            className="agt2-main-divider agt2-main-divider--afterChips"
+            aria-hidden
+          />
 
           <div className="agt2-suggest">
             {SUGGESTIONS.map((s) => (
@@ -439,7 +606,9 @@ export default function AgentsPage() {
             ))}
           </div>
 
-          <div className="agt2-suggest-foot">
+          <div className="agt2-main-divider" aria-hidden />
+
+          <div className="agt2-main-pad agt2-suggest-foot">
             <button
               type="button"
               className="agt2-linkbtn"
@@ -456,7 +625,7 @@ export default function AgentsPage() {
             </button>
           </div>
 
-          <div className="agt2-templates">
+          <div className="agt2-main-pad agt2-templates">
             <div className="agt2-templates-h">
               <div className="agt2-templates-title">
                 AGENT TEMPLATES{' '}

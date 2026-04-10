@@ -4335,16 +4335,39 @@ a.mkt-guide-btn:hover {
   text-overflow: ellipsis;
 }
 
+/* Full-bleed column: no horizontal padding so dividers span edge-to-edge beside the sidebar. */
 .agt2-main {
   flex: 1;
   overflow: auto;
-  padding: 26px 24px 28px;
+  padding: 26px 0 28px;
   background: #fff;
+}
+
+.agt2-main-pad {
+  box-sizing: border-box;
+  padding-left: 24px;
+  padding-right: 24px;
+  max-width: 100%;
+}
+
+.agt2-main-divider {
+  display: block;
+  width: 100%;
+  height: 1px;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: var(--border);
+}
+
+.agt2-main-divider--afterChips {
+  margin-top: 14px;
 }
 
 .agt2-hero {
   text-align: center;
   margin-top: 6px;
+  padding-bottom: 20px;
 }
 .agt2-h1 {
   font-family: 'Syne', sans-serif;
@@ -4362,8 +4385,18 @@ a.mkt-guide-btn:hover {
   font-size: 0.82rem;
 }
 
+.agt2-composer-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 18px;
+  max-width: 100%;
+}
+
 .agt2-composer {
-  margin: 18px 0 0;
+  margin: 0;
+  flex: 1;
+  min-width: 0;
   max-width: 100%;
   border-radius: 12px;
   border: 1px solid rgba(0, 0, 0, 0.1);
@@ -4382,93 +4415,33 @@ a.mkt-guide-btn:hover {
   background: transparent;
   color: rgba(0, 0, 0, 0.62);
 }
-.agt2-toolbar {
+/* Bottom bar: reuse HeroSearchCard .hsb-* inside beige composer card */
+.agt2-composer .agt2-composer-bar.hsb-bottom-bar {
   border-top: 1px solid rgba(0, 0, 0, 0.08);
-  padding: 10px 12px;
-  display: flex;
-  gap: 8px;
-  align-items: center;
+  padding: 10px 12px 12px;
+  margin: 0;
   background: #f4f1eb;
-}
-.agt2-icons {
-  display: inline-flex;
-  gap: 8px;
-  align-items: center;
-}
-.agt2-ic {
-  width: 18px;
-  height: 18px;
-  border-radius: 5px;
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  background: rgba(255, 255, 255, 0.85);
-  cursor: pointer;
-  padding: 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-family: inherit;
-  font-weight: 900;
-  font-size: 0.62rem;
-  color: rgba(0, 0, 0, 0.55);
-}
-.agt2-ic.t1 {
-  background: #efe7ff;
-  border-color: rgba(128, 90, 213, 0.25);
-  color: #6b46c1;
-}
-.agt2-ic.t2 {
-  background: #fff3df;
-  border-color: rgba(213, 126, 0, 0.25);
-  color: #b7791f;
-}
-.agt2-ic.t3 {
-  background: #e7fbf1;
-  border-color: rgba(0, 138, 90, 0.22);
-  color: #0a5e49;
-}
-.agt2-ic.t4 {
-  background: #e8f0ff;
-  border-color: rgba(30, 77, 168, 0.22);
-  color: #1e4da8;
-}
-.agt2-ic.t5 {
-  background: #ffe9ef;
-  border-color: rgba(155, 32, 66, 0.2);
-  color: #9b2042;
-}
-.agt2-ic.t6 {
-  background: #fff3df;
-  border-color: rgba(213, 126, 0, 0.25);
-  color: #b7791f;
-}
-.agt2-ic.t7 {
-  background: transparent;
-  border: none;
-  color: rgba(0, 0, 0, 0.42);
-  width: 18px;
-  height: 18px;
+  min-height: 44px;
+  box-sizing: border-box;
 }
 .agt2-spacer {
   flex: 1;
 }
-.agt2-pill {
-  padding: 5px 10px;
-  border-radius: 999px;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  background: rgba(255, 255, 255, 0.6);
-  font-size: 0.74rem;
-  font-weight: 900;
-  color: rgba(0, 0, 0, 0.48);
-}
 .agt2-send {
-  width: 38px;
-  height: 38px;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
   border-radius: 999px;
   border: none;
   background: var(--accent);
   color: #fff;
   cursor: pointer;
   font-weight: 900;
+  font-size: 0.95rem;
+  line-height: 1;
 }
 .agt2-chips {
   margin: 12px 0 0;
@@ -4502,7 +4475,7 @@ a.mkt-guide-btn:hover {
 }
 
 .agt2-suggest {
-  margin: 14px 0 0;
+  margin: 0;
   max-width: 100%;
   border-top: none;
 }
@@ -4511,7 +4484,8 @@ a.mkt-guide-btn:hover {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 12px 10px;
+  padding: 12px 24px;
+  box-sizing: border-box;
   border-bottom: 1px solid var(--border);
   background: transparent;
   border-left: none;
@@ -4551,7 +4525,8 @@ a.mkt-guide-btn:hover {
 }
 
 .agt2-suggest-foot {
-  margin: 10px 0 0;
+  margin: 0;
+  padding-top: 12px;
   max-width: 100%;
   display: flex;
   justify-content: space-between;
@@ -4575,8 +4550,6 @@ a.mkt-guide-btn:hover {
   margin: 0;
   max-width: 100%;
   width: 100%;
-}
-.agt2-templates {
   padding-top: 84px;
 }
 .agt2-templates-title {
@@ -4754,7 +4727,15 @@ a.mkt-guide-btn:hover {
     border-bottom: 1px solid rgba(0, 0, 0, 0.06);
   }
   .agt2-main {
-    padding: 18px 14px;
+    padding: 18px 0;
+  }
+  .agt2-main-pad {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+  .agt2-sug-row {
+    padding-left: 14px;
+    padding-right: 14px;
   }
   .agt2-tplgrid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
