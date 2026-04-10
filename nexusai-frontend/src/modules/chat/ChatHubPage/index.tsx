@@ -155,14 +155,77 @@ const MODEL_DETAILS: Record<string, { icon: string; bg: string; name: string; or
   'gemini-ultra': { icon: '🔬', bg: '#EBF0FC', name: 'Gemini 2.5 Ultra', org: 'by Google', desc: 'Google\'s most capable model with 1M+ context and strong multimodal skills.', ctx: '1.05M', price: '$3.50', rating: '4.8⭐' },
 };
 
+function getActiveModelDetails(modelId: string) {
+  const detailed = MODEL_DETAILS[modelId];
+  if (detailed) return detailed;
+
+  const sb = SB_MODELS.find((m) => m.id === modelId);
+  if (sb) {
+    return {
+      icon: sb.icon,
+      bg: sb.bg,
+      name: sb.name,
+      org: `by ${sb.org}`,
+      desc: 'Select a model to see details.',
+      ctx: '—',
+      price: '—',
+      rating: '—',
+    };
+  }
+
+  return {
+    icon: '✦',
+    bg: 'var(--bg2)',
+    name: modelId,
+    org: 'by —',
+    desc: 'Select a model to see details.',
+    ctx: '—',
+    price: '—',
+    rating: '—',
+  };
+}
+
+type UsageOverview = { requests: string; avgLatency: string; costToday: string; spark: number[] };
+
+const USAGE_OVERVIEW: Record<string, UsageOverview> = {
+  'gpt5-turbo': { requests: '1,284', avgLatency: '1.2s', costToday: '$2.40', spark: [8, 10, 14, 12, 18, 22, 16, 20, 28, 24, 26, 30, 22, 18, 20, 26, 34, 30, 28, 36, 40, 34] },
+  'claude-opus': { requests: '642', avgLatency: '1.6s', costToday: '$3.10', spark: [6, 8, 10, 12, 14, 16, 18, 16, 14, 20, 22, 24, 20, 18, 22, 26, 28, 30, 34, 32, 30, 28] },
+  'claude-sonnet': { requests: '903', avgLatency: '1.3s', costToday: '$2.05', spark: [7, 9, 11, 13, 12, 14, 18, 20, 18, 16, 22, 24, 26, 24, 22, 28, 30, 32, 34, 36, 34, 32] },
+  'gemini-ultra': { requests: '1,094', avgLatency: '1.1s', costToday: '$2.55', spark: [9, 11, 12, 14, 16, 18, 22, 24, 26, 22, 20, 24, 28, 30, 32, 34, 36, 34, 32, 38, 40, 42] },
+};
+
+function getUsageOverview(modelId: string): UsageOverview {
+  const preset = USAGE_OVERVIEW[modelId];
+  if (preset) return preset;
+
+  // Deterministic fallback based on modelId string (no Math.random -> avoids hydration mismatch)
+  let seed = 0;
+  for (let i = 0; i < modelId.length; i++) seed = (seed * 31 + modelId.charCodeAt(i)) >>> 0;
+  const next = () => (seed = (seed * 1664525 + 1013904223) >>> 0);
+
+  const req = 600 + (next() % 1200);
+  const latencyTenth = 9 + (next() % 11); // 0.9s - 1.9s
+  const costCents = 140 + (next() % 260); // $1.40 - $3.99
+
+  const spark = Array.from({ length: 22 }, () => 6 + (next() % 38)); // 6-43
+
+  return {
+    requests: req.toLocaleString('en-US'),
+    avgLatency: `${(latencyTenth / 10).toFixed(1)}s`,
+    costToday: `$${(costCents / 100).toFixed(2)}`,
+    spark,
+  };
+}
+
 const ChatHubPage = () => {
-  const [activeTab, setActiveTab] = useState<'chat' | 'marketplace' | 'agents' | 'research'>('chat');
+  const [activeTab, setActiveTab] = useState<'chat' | 'agents'>('chat');
   const [selectedModel, setSelectedModel] = useState('gpt5');
   const [cpanelTab, setCpanelTab] = useState('use_cases');
   const [inputVal, setInputVal] = useState('');
 
   const activeCpanel = CPANEL_TABS.find((t) => t.key === cpanelTab);
-  const activeModel = MODEL_DETAILS[selectedModel];
+  const activeModel = getActiveModelDetails(selectedModel);
+  const usage = getUsageOverview(selectedModel);
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', overflow: 'hidden', background: 'var(--bg)' }}>
@@ -178,9 +241,9 @@ const ChatHubPage = () => {
 
         <div className="app-tabs">
           <button className={`app-tab${activeTab === 'chat' ? ' active' : ''}`} onClick={() => setActiveTab('chat')}>💬 Chat Hub</button>
-          <button className={`app-tab${activeTab === 'marketplace' ? ' active' : ''}`} onClick={() => setActiveTab('marketplace')}>🛍 Marketplace</button>
-          <button className={`app-tab${activeTab === 'agents' ? ' active' : ''}`} onClick={() => setActiveTab('agents')}>🤖 Agents</button>
-          <button className={`app-tab${activeTab === 'research' ? ' active' : ''}`} onClick={() => setActiveTab('research')}>🔬 Discover New</button>
+          <Link className="app-tab" href="/marketplace">🛍 Marketplace</Link>
+          <Link className="app-tab" href="/agents">🤖 Agents</Link>
+          <Link className="app-tab" href="/discover">🔬 Discover New</Link>
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -228,152 +291,153 @@ const ChatHubPage = () => {
 
         {/* ── Central ── */}
         <main className="central">
+          <>
+              {/* Chat Area */}
+              <div className="chat-area" id="chat-area">
+                {/* Greeting Card */}
+                <div className="greet-card" style={{ alignSelf: 'center' }}>
+                  <div className="greet-avatar">✦</div>
+                  <h3 style={{ fontSize: '1.45rem', letterSpacing: '-0.02em', marginBottom: '0.4rem' }}>
+                    Welcome! I&apos;m here to help you 👋
+                  </h3>
+                  <p style={{ fontSize: '0.88rem', color: 'var(--text2)', marginBottom: '1.25rem', lineHeight: 1.65, textAlign: 'center' }}>
+                    No tech background needed. Tell me what you&apos;d like to <strong>achieve</strong> — I&apos;ll help you discover what&apos;s possible, step by step.
+                  </p>
 
-          {/* Chat Area */}
-          <div className="chat-area" id="chat-area">
-            {/* Greeting Card */}
-            <div className="greet-card" style={{ alignSelf: 'center' }}>
-              <div className="greet-avatar">✦</div>
-              <h3 style={{ fontSize: '1.45rem', letterSpacing: '-0.02em', marginBottom: '0.4rem' }}>
-                Welcome! I&apos;m here to help you 👋
-              </h3>
-              <p style={{ fontSize: '0.88rem', color: 'var(--text2)', marginBottom: '1.25rem', lineHeight: 1.65, textAlign: 'center' }}>
-                No tech background needed. Tell me what you&apos;d like to <strong>achieve</strong> — I&apos;ll help you discover what&apos;s possible, step by step.
-              </p>
-
-              {/* Goal tiles container */}
-              <div style={{ background: 'var(--bg)', border: '1px solid var(--border)', borderRadius: 'var(--radius)', padding: '1rem', marginBottom: '1rem' }}>
-                <div style={{ fontSize: '0.72rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.07em', color: 'var(--accent)', marginBottom: '0.75rem' }}>
-                  ✨ What would you like to do today?
-                </div>
-                <div className="ob-grid">
-                  {GOAL_TILES.map((tile) => (
-                    <div
-                      key={tile.label}
-                      className="ob-tile"
-                      onClick={() => setInputVal(tile.label)}
-                    >
-                      <span className="ob-tile-icon">{tile.em}</span>
-                      <div className="ob-tile-label">{tile.label}</div>
-                      <div className="ob-tile-sub">{tile.sub}</div>
+                  {/* Goal tiles container */}
+                  <div style={{ background: 'var(--bg)', border: '1px solid var(--border)', borderRadius: 'var(--radius)', padding: '1rem', marginBottom: '1rem' }}>
+                    <div style={{ fontSize: '0.72rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.07em', color: 'var(--accent)', marginBottom: '0.75rem' }}>
+                      ✨ What would you like to do today?
                     </div>
-                  ))}
-                </div>
-              </div>
+                    <div className="ob-grid">
+                      {GOAL_TILES.map((tile) => (
+                        <div
+                          key={tile.label}
+                          className="ob-tile"
+                          onClick={() => setInputVal(tile.label)}
+                        >
+                          <span className="ob-tile-icon">{tile.em}</span>
+                          <div className="ob-tile-label">{tile.label}</div>
+                          <div className="ob-tile-sub">{tile.sub}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
 
-              <div style={{ textAlign: 'center', fontSize: '0.78rem', color: 'var(--text3)' }}>
-                Or type anything below — there are no wrong answers ↓
-              </div>
-            </div>
-          </div>
-
-          {/* ── Input Area ── */}
-          <div className="inp-area">
-            <div className="hub-attach-row" id="hub-attach-row" />
-
-            <div className="inp-row">
-              <div className="inp-wrap">
-                <textarea
-                  id="chat-input"
-                  rows={1}
-                  placeholder="Describe your project, ask a question, or just say hi — I'm here to help…"
-                  value={inputVal}
-                  onChange={(e) => setInputVal(e.target.value)}
-                />
-                <div className="inp-bar">
-                  {/* Voice */}
-                  <button className="inp-icon-btn ic-purple" title="Voice conversation">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M12 2a3 3 0 0 1 3 3v7a3 3 0 0 1-6 0V5a3 3 0 0 1 3-3z"/>
-                      <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
-                      <line x1="12" y1="19" x2="12" y2="22"/>
-                    </svg>
-                  </button>
-                  {/* Voice typing */}
-                  <button className="inp-icon-btn ic-orange" title="Voice typing">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <rect x="2" y="14" width="20" height="7" rx="2"/>
-                      <path d="M12 2a2 2 0 0 1 2 2v5a2 2 0 0 1-4 0V4a2 2 0 0 1 2-2z"/>
-                      <path d="M18 10v1a6 6 0 0 1-12 0v-1"/>
-                      <line x1="8" y1="17.5" x2="8" y2="17.51"/>
-                      <line x1="12" y1="17.5" x2="12" y2="17.51"/>
-                      <line x1="16" y1="17.5" x2="16" y2="17.51"/>
-                    </svg>
-                  </button>
-                  {/* Video */}
-                  <button className="inp-icon-btn ic-blue" title="Video">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <polygon points="23 7 16 12 23 17 23 7"/>
-                      <rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
-                    </svg>
-                  </button>
-                  {/* Screen sharing */}
-                  <button className="inp-icon-btn ic-teal" title="Screen sharing">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <rect x="2" y="3" width="20" height="14" rx="2"/>
-                      <polyline points="8 21 12 17 16 21"/>
-                      <line x1="12" y1="17" x2="12" y2="21"/>
-                    </svg>
-                  </button>
-                  {/* Attach */}
-                  <button className="inp-icon-btn ic-rose" title="Attach file">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/>
-                    </svg>
-                  </button>
-                  {/* Image */}
-                  <button className="inp-icon-btn ic-green" title="Upload image">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <rect x="3" y="3" width="18" height="18" rx="2"/>
-                      <circle cx="8.5" cy="8.5" r="1.5"/>
-                      <polyline points="21 15 16 10 5 21"/>
-                    </svg>
-                  </button>
-
-                  <button className="itool" title="Prompt tips">✦</button>
-                  <div className="model-sel">
-                    <span>{SB_MODELS.find((m) => m.id === selectedModel)?.name || 'GPT-5'}</span>
-                    <svg width="10" height="10" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
+                  <div style={{ textAlign: 'center', fontSize: '0.78rem', color: 'var(--text3)' }}>
+                    Or type anything below — there are no wrong answers ↓
                   </div>
                 </div>
               </div>
-              <button className="send-btn">
-                <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                  <path d="M22 2 11 13M22 2l-7 20-4-9-9-4 20-7z"/>
-                </svg>
-              </button>
-            </div>
 
-            {/* ── Category Prompt Panel ── */}
-            <div className="cpanel">
-              <div className="cpanel-tabs">
-                {CPANEL_TABS.map((tab) => (
-                  <button
-                    key={tab.key}
-                    className={`cpanel-tab${cpanelTab === tab.key ? ' active' : ''}`}
-                    onClick={() => setCpanelTab(tab.key)}
-                  >
-                    {tab.icon}
-                    {tab.label}
+              {/* ── Input Area ── */}
+              <div className="inp-area">
+                <div className="hub-attach-row" id="hub-attach-row" />
+
+                <div className="inp-row">
+                  <div className="inp-wrap">
+                    <textarea
+                      id="chat-input"
+                      rows={1}
+                      placeholder="Describe your project, ask a question, or just say hi — I'm here to help…"
+                      value={inputVal}
+                      onChange={(e) => setInputVal(e.target.value)}
+                    />
+                    <div className="inp-bar">
+                      {/* Voice */}
+                      <button className="inp-icon-btn ic-purple" title="Voice conversation">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M12 2a3 3 0 0 1 3 3v7a3 3 0 0 1-6 0V5a3 3 0 0 1 3-3z"/>
+                          <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                          <line x1="12" y1="19" x2="12" y2="22"/>
+                        </svg>
+                      </button>
+                      {/* Voice typing */}
+                      <button className="inp-icon-btn ic-orange" title="Voice typing">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <rect x="2" y="14" width="20" height="7" rx="2"/>
+                          <path d="M12 2a2 2 0 0 1 2 2v5a2 2 0 0 1-4 0V4a2 2 0 0 1 2-2z"/>
+                          <path d="M18 10v1a6 6 0 0 1-12 0v-1"/>
+                          <line x1="8" y1="17.5" x2="8" y2="17.51"/>
+                          <line x1="12" y1="17.5" x2="12" y2="17.51"/>
+                          <line x1="16" y1="17.5" x2="16" y2="17.51"/>
+                        </svg>
+                      </button>
+                      {/* Video */}
+                      <button className="inp-icon-btn ic-blue" title="Video">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <polygon points="23 7 16 12 23 17 23 7"/>
+                          <rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
+                        </svg>
+                      </button>
+                      {/* Screen sharing */}
+                      <button className="inp-icon-btn ic-teal" title="Screen sharing">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <rect x="2" y="3" width="20" height="14" rx="2"/>
+                          <polyline points="8 21 12 17 16 21"/>
+                          <line x1="12" y1="17" x2="12" y2="21"/>
+                        </svg>
+                      </button>
+                      {/* Attach */}
+                      <button className="inp-icon-btn ic-rose" title="Attach file">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/>
+                        </svg>
+                      </button>
+                      {/* Image */}
+                      <button className="inp-icon-btn ic-green" title="Upload image">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <rect x="3" y="3" width="18" height="18" rx="2"/>
+                          <circle cx="8.5" cy="8.5" r="1.5"/>
+                          <polyline points="21 15 16 10 5 21"/>
+                        </svg>
+                      </button>
+
+                      <button className="itool" title="Prompt tips">✦</button>
+                      <div className="model-sel">
+                        <span>{SB_MODELS.find((m) => m.id === selectedModel)?.name || 'GPT-5'}</span>
+                        <svg width="10" height="10" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
+                      </div>
+                    </div>
+                  </div>
+                  <button className="send-btn">
+                    <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                      <path d="M22 2 11 13M22 2l-7 20-4-9-9-4 20-7z"/>
+                    </svg>
                   </button>
-                ))}
+                </div>
+
+                {/* ── Category Prompt Panel ── */}
+                <div className="cpanel">
+                  <div className="cpanel-tabs">
+                    {CPANEL_TABS.map((tab) => (
+                      <button
+                        key={tab.key}
+                        className={`cpanel-tab${cpanelTab === tab.key ? ' active' : ''}`}
+                        onClick={() => setCpanelTab(tab.key)}
+                      >
+                        {tab.icon}
+                        {tab.label}
+                      </button>
+                    ))}
+                  </div>
+                  <div className="cpanel-prompts">
+                    {activeCpanel?.prompts.map((p) => (
+                      <button key={p} className="cpanel-prompt" onClick={() => setInputVal(p)}>
+                        {p}
+                      </button>
+                    ))}
+                  </div>
+                </div>
               </div>
-              <div className="cpanel-prompts">
-                {activeCpanel?.prompts.map((p) => (
-                  <button key={p} className="cpanel-prompt" onClick={() => setInputVal(p)}>
-                    {p}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
+            </>
         </main>
 
         {/* ── Right Panel ── */}
         <aside className="rpanel">
 
           {/* Active Model Card — shown when a model is selected from sidebar */}
-          {activeModel && selectedModel !== 'gpt5' && (
+          {selectedModel !== 'gpt5' && (
             <div style={{ padding: '1rem', borderBottom: '1px solid var(--border)' }}>
               <div className="rp-lbl">ACTIVE MODEL</div>
               <div style={{ background: 'var(--bg)', border: '1px solid var(--border)', borderRadius: 'var(--radius)', padding: '0.875rem', marginTop: '0.5rem' }}>
@@ -399,13 +463,47 @@ const ChatHubPage = () => {
             </div>
           )}
 
+          {/* Usage Overview — shown when a model is selected (matches Raw html/index.html) */}
+          {selectedModel !== 'gpt5' && (
+            <div className="rp-usage show">
+              <div className="rp-lbl">USAGE OVERVIEW</div>
+              <div className="rp-usage-stats">
+                <div className="rp-usage-stat">
+                  <div className="u-label">Requests</div>
+                  <div className="u-val">{usage.requests}</div>
+                </div>
+                <div className="rp-usage-stat">
+                  <div className="u-label">Avg Latency</div>
+                  <div className="u-val">{usage.avgLatency}</div>
+                </div>
+                <div className="rp-usage-stat">
+                  <div className="u-label">Cost (today)</div>
+                  <div className="u-val">{usage.costToday}</div>
+                </div>
+              </div>
+              <div className="rp-spark-wrap">
+                <div className="rp-spark" aria-hidden>
+                  {usage.spark.map((h, i) => (
+                    <div
+                      key={i}
+                      className="rp-spark-bar"
+                      style={{ height: h, opacity: 0.55 + (h / 100) }}
+                    />
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Quick Actions */}
           <div className="rp-sec" style={{ flex: 1, overflowY: 'auto' }}>
             <div className="rp-lbl">Quick Actions</div>
             <div className="qa-grid">
-              {QA_GROUPS.map((group) => (
+              {QA_GROUPS.map((group, idx) => (
                 <div key={group.label}>
-                  <div className="qa-group-label">{group.label}</div>
+                  <div className="qa-group-label" style={idx === 0 ? undefined : { marginTop: 10 }}>
+                    {group.label}
+                  </div>
                   {group.items.map((item) => (
                     <button key={item.text} className="qa-btn">
                       <span className="qa-icon">{item.icon}</span>
